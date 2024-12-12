@@ -3,8 +3,8 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <t:pageTemplate pageTitle="Cars">
     <h1>Cars</h1>
+    <c:if test="${pageContext.request.isUserInRole('WRITE_CARS')}">
     <form method="post" action="${pageContext.request.contextPath}/Cars">
-        <c:if test="${pageContext.request.isUserInRole('WRITE_CARS')}">
             <a class="btn btn-primary btn-lg" href="${pageContext.request.contextPath}/AddCar">Add Car</a>
             <button class="btn btn-danger" type="submit">Delete Cars</button>
         <div class="container text-center">
@@ -21,13 +21,23 @@
                     </div>
                     <div class="col">
                             ${car.ownerName}
+                    </div>
+                    <div class="col">
+                        <img src="${pageContext.request.contextPath}/CarPhotos?id=${car.id}" width="48"/>
+                    </div>
+                    <c:if test="${pageContext.request.isUserInRole('WRITE_CARS')}">
+                        <div class="col">
+                            <a class="btn btn-secondary" href="${pageContext.request.contextPath}/AddCarPhoto?id=${car.id}" role="button">Add photo</a>
+                        </div>
+                    </c:if>
+                    <div class="col">
                         <a class="btn btn-secondary"
                            href="${pageContext.request.contextPath}/EditCar?id=${car.id}">EditCar</a>
                     </div>
                 </div>
             </c:forEach>
         </div>
-        </c:if>
-        <h5>Free parking spots: ${numberOfFreeParkingSpots}</h5>
     </form>
+    </c:if>
+    <h5>Free parking spots: ${numberOfFreeParkingSpots}</h5>
 </t:pageTemplate>
