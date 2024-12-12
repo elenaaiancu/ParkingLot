@@ -4,11 +4,11 @@
 <t:pageTemplate pageTitle="Cars">
     <h1>Cars</h1>
     <form method="post" action="${pageContext.request.contextPath}/Cars">
-        <a class="btn btn-primary btn-lg" href="${pageContext.request.contextPath}/AddCar">Add Car</a>
-        <button class="btn btn-danger" type="submit">Delete Cars</button>
+        <c:if test="${pageContext.request.isUserInRole('WRITE_CARS')}">
+            <a class="btn btn-primary btn-lg" href="${pageContext.request.contextPath}/AddCar">Add Car</a>
+            <button class="btn btn-danger" type="submit">Delete Cars</button>
         <div class="container text-center">
             <c:forEach var="car" items="${cars}">
-
                 <div class="row">
                     <div class="col">
                         <input type="checkbox" name="car_ids" value="${car.id}"/>
@@ -27,6 +27,7 @@
                 </div>
             </c:forEach>
         </div>
+        </c:if>
         <h5>Free parking spots: ${numberOfFreeParkingSpots}</h5>
     </form>
 </t:pageTemplate>
