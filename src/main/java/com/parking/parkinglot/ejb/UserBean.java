@@ -78,4 +78,24 @@ public class UserBean {
                 String.class).setParameter("userIds", userIds).getResultList();
         return usernames;
     }
+    public UserDto findById(Long userId) {
+        User user = entityManager.find(User.class, userId);
+        if (user != null) {
+            return new UserDto(user.getId(), user.getUsername(), user.getEmail(), null);
+        }
+        return null;
+    }
+
+    // Method to update a user's details
+    public void updateUser(Long userId, String username, String email, String password) {
+        User user = entityManager.find(User.class, userId);
+        if (user != null) {
+            user.setUsername(username);
+            user.setEmail(email);
+            if (password != null) {
+                user.setPassword(password); // Assuming the password is already hashed before being saved
+            }
+            entityManager.merge(user);
+        }
+    }
 }

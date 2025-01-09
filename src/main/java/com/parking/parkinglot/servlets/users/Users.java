@@ -1,4 +1,4 @@
-package com.parking.parkinglot;
+package com.parking.parkinglot.servlets.users;
 
 import com.parking.parkinglot.common.UserDto;
 import com.parking.parkinglot.ejb.InvoiceBean;
@@ -33,17 +33,21 @@ public class Users extends HttpServlet {
         List<UserDto> users = userBean.findAllUsers();
         request.setAttribute("users", users);
 
-        if(!invoiceBean.getUserIds().isEmpty()){
-            Collection<String> usernames= userBean.findUsernamesByUserIds(invoiceBean.getUserIds());
-            request.setAttribute("invoices", usernames);
+        if(request.isUserInRole("INVOICING")) {
+            if (!invoiceBean.getUserIds().isEmpty()) {
+                Collection<String> usernames = userBean.findUsernamesByUserIds(invoiceBean.getUserIds());
+                request.setAttribute("invoices", usernames);
+            }
         }
 
-        request.getRequestDispatcher("/WEB-INF/pages/users.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/pages/users/users.jsp").forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse
             response) throws ServletException, IOException {
+        if(request.isUserInRole("INVOICING"))
+        {
         String[] userIdsAsString = request.getParameterValues("user_ids");
         if (userIdsAsString != null ){
             List<Long> userIds = new ArrayList<>();
@@ -53,5 +57,6 @@ public class Users extends HttpServlet {
             invoiceBean.getUserIds().addAll(userIds);
         }
         response.sendRedirect(request.getContextPath() + "/Users");
+        }
     }
 }

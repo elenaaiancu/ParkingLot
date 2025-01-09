@@ -1,6 +1,5 @@
 package com.parking.parkinglot.entities;
 
-import com.parking.parkinglot.Cars;
 import jakarta.persistence.*;
 
 @Entity

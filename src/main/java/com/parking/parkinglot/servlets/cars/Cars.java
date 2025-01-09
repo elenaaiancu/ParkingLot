@@ -1,4 +1,4 @@
-package com.parking.parkinglot;
+package com.parking.parkinglot.servlets.cars;
 
 import com.parking.parkinglot.common.CarDto;
 import com.parking.parkinglot.ejb.CarsBean;
@@ -29,8 +29,15 @@ public class Cars extends HttpServlet {
         List<CarDto> cars = carsBean.findAllCars();
         request.setAttribute("cars", cars);
 
-        request.setAttribute("numberOfFreeParkingSpots", 10);
-        request.getRequestDispatcher("/WEB-INF/pages/cars.jsp").forward(request, response);
+        long carCount = cars.size(); // Total number of cars
+        long numberOfFreeParkingSpots = 10 - carCount; // Assume 10 total spots
+        if (numberOfFreeParkingSpots < 0) {
+            numberOfFreeParkingSpots = 0; // Prevent negative values
+        }
+        request.setAttribute("numberOfFreeParkingSpots", numberOfFreeParkingSpots);
+
+
+        request.getRequestDispatcher("/WEB-INF/pages/cars/cars.jsp").forward(request, response);
     }
 
     @Override
